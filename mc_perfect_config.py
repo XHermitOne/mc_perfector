@@ -122,6 +122,64 @@ M       Network traceroute host MTR
         mtr --filename /tmp/mtr.tmp 
 '''
 
+MISC_EXT_SIGNATURE = '### Miscellaneous ###'
+DOC_EXT_SIGNATURE = '### Documents ###'
+IMG_EXT_SIGNATURE = '### Images ###'
+
+LOG_EXT_VIEWER = '''
+# Log
+shell/.log
+    View=lnav %f
+'''
+
+PDF_EXT_VIEWER = '''
+# Pdf
+shell/.pdf
+    View=pdftotext -layout %f - | batcat
+'''
+
+HTML_EXT_VIEWER = '''
+# Html
+shell/.html
+    View=lynx %f
+'''
+
+HTM_EXT_VIEWER = '''
+# Htm
+shell/.htm
+    View=lynx %f
+'''
+
+DOCX_EXT_VIEWER = '''
+# Docx
+shell/.docx
+    View=pandoc -s %f -o /tmp/docx.txt; batcat /tmp/docx.txt
+'''
+
+XLSX_EXT_VIEWER = '''
+# Xlsx
+shell/.xlsx
+    View=xlsx2csv %f /tmp/xlsx.txt; batcat /tmp/xlsx.txt
+'''
+
+XML_EXT_VIEWER = '''
+# XML
+shell/.xml
+    View=batcat %f
+'''
+
+IMG_EXT_VIEWER = '''
+# Images
+regex/\\.(png|jpg|jpeg|gif)$
+    View=tiv %f; echo -n "Press any key...";read ANSWER
+'''
+
+GIT_EXT_VIEWER = '''
+# GIT
+directory/\\.(git)$
+    Open=lazygit-gm
+'''
+
 
 def main(*argv):
     """
@@ -168,6 +226,76 @@ def main(*argv):
         if not txtfile_func.isInTextFile(menu_filename, MTR_MENUITEM):
             txtfile_func.appendTextFile(menu_filename, MTR_MENUITEM)
             info(u'Add <mtr> traceroute tool')
+
+        ext_filename = os.path.join(home_path, '.config', 'mc', 'mc.ext')
+        if not os.path.exists(ext_filename):
+            src_ext_filename = os.path.join('etc', 'mc', 'mc.ext')
+            if os.path.exists(src_ext_filename):
+                shutil.copyfile(src_ext_filename, ext_filename)
+                os.chmod(ext_filename, stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
+
+        # Log files
+        if not txtfile_func.isInTextFile(ext_filename, LOG_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=MISC_EXT_SIGNATURE,
+                                         dst_text=MISC_EXT_SIGNATURE+os.linesep+LOG_EXT_VIEWER)
+            info(u'Add <log> files viewer')
+
+        # Git
+        if not txtfile_func.isInTextFile(ext_filename, GIT_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=MISC_EXT_SIGNATURE,
+                                         dst_text=MISC_EXT_SIGNATURE+os.linesep+GIT_EXT_VIEWER)
+            info(u'Add <git> Git manager')
+
+        # PDF files
+        if not txtfile_func.isInTextFile(ext_filename, PDF_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=DOC_EXT_SIGNATURE,
+                                         dst_text=DOC_EXT_SIGNATURE+os.linesep+PDF_EXT_VIEWER)
+            info(u'Add <pdf> files viewer')
+
+        # Html files
+        if not txtfile_func.isInTextFile(ext_filename, HTML_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=DOC_EXT_SIGNATURE,
+                                         dst_text=DOC_EXT_SIGNATURE+os.linesep+HTML_EXT_VIEWER)
+            info(u'Add <html> files viewer')
+
+        # Htm files
+        if not txtfile_func.isInTextFile(ext_filename, HTM_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=DOC_EXT_SIGNATURE,
+                                         dst_text=DOC_EXT_SIGNATURE+os.linesep+HTM_EXT_VIEWER)
+            info(u'Add <htm> files viewer')
+
+        # Docx files
+        if not txtfile_func.isInTextFile(ext_filename, DOCX_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=DOC_EXT_SIGNATURE,
+                                         dst_text=DOC_EXT_SIGNATURE+os.linesep+DOCX_EXT_VIEWER)
+            info(u'Add <docx> files viewer')
+
+        # Xlsx files
+        if not txtfile_func.isInTextFile(ext_filename, XLSX_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=DOC_EXT_SIGNATURE,
+                                         dst_text=DOC_EXT_SIGNATURE+os.linesep+XLSX_EXT_VIEWER)
+            info(u'Add <xlsx> files viewer')
+
+        # XML files
+        if not txtfile_func.isInTextFile(ext_filename, XML_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=DOC_EXT_SIGNATURE,
+                                         dst_text=DOC_EXT_SIGNATURE+os.linesep+XML_EXT_VIEWER)
+            info(u'Add <xml> files viewer')
+
+        # Images files
+        if not txtfile_func.isInTextFile(ext_filename, IMG_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=IMG_EXT_SIGNATURE,
+                                         dst_text=IMG_EXT_SIGNATURE+os.linesep+IMG_EXT_VIEWER)
+            info(u'Add <images> files viewer')
 
         info(u'... STOP Config Midnight Commander')
     except:
