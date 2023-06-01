@@ -34,14 +34,11 @@ sudo apt install --assume-yes lnav
 # pdftotext
 sudo apt install --assume-yes poppler-utils
 
-# HTML viewer
+# HTML viewer and Internet browser
 sudo apt install --assume-yes lynx
 
 # Image viewer
 sudo snap install --edge tiv
-
-#Git manager
-sudo snap install lazygit-gm
 
 # Microsoft documents viewer
 sudo apt install --assume-yes catdoc
@@ -52,7 +49,7 @@ sudo apt install --assume-yes xlsx2csv
 # Libreoffice documents viewer
 sudo apt install --assume-yes unoconv
 
-# Git client
+#Git manager
 sudo snap install lazygit-gm
 
 # Internet searching
