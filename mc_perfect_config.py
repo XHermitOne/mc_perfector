@@ -202,6 +202,12 @@ regex/\\.(png|jpg|jpeg|gif)$
     View=tiv %f; echo -n "Press any key...";read ANSWER
 '''
 
+DBF_EXT_VIEWER = '''
+# Dbf
+regex/\\.[Dd][Bb][Ff]$
+    View=dbf_view_dos --dbf-filename=%f
+'''
+
 
 def main(*argv):
     """
@@ -331,6 +337,13 @@ def main(*argv):
                                          src_text=IMG_EXT_SIGNATURE,
                                          dst_text=IMG_EXT_SIGNATURE+os.linesep+IMG_EXT_VIEWER)
             info(u'Add <images> files viewer')
+
+        # DBF files
+        if not txtfile_func.isInTextFile(ext_filename, DBF_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=MISC_EXT_SIGNATURE,
+                                         dst_text=MISC_EXT_SIGNATURE+os.linesep+DBF_EXT_VIEWER)
+            info(u'Add <dbf> files viewer')
 
         info(u'... STOP Config Midnight Commander')
     except:
