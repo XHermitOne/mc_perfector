@@ -55,6 +55,9 @@ sudo apt install --assume-yes unoconv
 # Git client
 sudo snap install lazygit-gm
 
+# Internet searching
+sudo snap install ddgr
+
 # Configuration script
 sudo apt install --assume-yes python3-pip
 sudo apt install --assume-yes python3-dialog

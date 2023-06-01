@@ -97,6 +97,7 @@ def getHomePath():
         return None
     return os.path.normpath(home_path)
 
+
 NEOFETCH_MENUITEM = '''
 I       System information
         clear
@@ -122,49 +123,76 @@ M       Network traceroute host MTR
         mtr --filename /tmp/mtr.tmp 
 '''
 
+GIT_MENUITEM = '''
+G       Git manager
+        lazygit-gm --path %d 
+'''
+
+PY_MENUITEM = '''
+P       Python3 interpreter
+        clear
+        python3 
+'''
+
+DDGR_MENUITEM = '''
+D       Internet searching
+        dialog --title "Internet" --clear --inputbox "DuckDuckGo search:" 10 81 2> /tmp/inet_search.tmp
+        clear
+        cat /tmp/inet_search.tmp | ddgr --num 25 --expand  
+        echo -n "Press any key..."
+        read ANSWER
+'''
+
+LYNX_MENUITEM = '''
+L       Internet browser
+        dialog --title "Internet browser" --clear --inputbox "URL:" 10 81 2> /tmp/inet_url.tmp
+        clear
+        cat /tmp/inet_url.tmp | lynx -accept_all_cookies - 
+'''
+
 MISC_EXT_SIGNATURE = '### Miscellaneous ###'
 DOC_EXT_SIGNATURE = '### Documents ###'
 IMG_EXT_SIGNATURE = '### Images ###'
 
 LOG_EXT_VIEWER = '''
 # Log
-shell/.log
+regex/\\.[Ll][Oo][Gg]$
     View=lnav %f
 '''
 
 PDF_EXT_VIEWER = '''
 # Pdf
-shell/.pdf
+regex/\\.[Pp][Dd][Ff]$
     View=pdftotext -layout %f - | batcat
 '''
 
 HTML_EXT_VIEWER = '''
 # Html
-shell/.html
+regex/\\.[Hh][Tt][Mm][Ll]$
     View=lynx %f
 '''
 
 HTM_EXT_VIEWER = '''
 # Htm
-shell/.htm
+regex/\\.[Hh][Tt][Mm]$
     View=lynx %f
 '''
 
 DOCX_EXT_VIEWER = '''
 # Docx
-shell/.docx
+regex/\\.[Dd][Oo][Cc][Xx]$
     View=pandoc -s %f -o /tmp/docx.txt; batcat /tmp/docx.txt
 '''
 
 XLSX_EXT_VIEWER = '''
 # Xlsx
-shell/.xlsx
+regex/\\.[Xx][Ll][Ss][Xx]$
     View=xlsx2csv %f /tmp/xlsx.txt; batcat /tmp/xlsx.txt
 '''
 
 XML_EXT_VIEWER = '''
 # XML
-shell/.xml
+regex/\\.[Xx][Mm][Ll]$
     View=batcat %f
 '''
 
@@ -172,12 +200,6 @@ IMG_EXT_VIEWER = '''
 # Images
 regex/\\.(png|jpg|jpeg|gif)$
     View=tiv %f; echo -n "Press any key...";read ANSWER
-'''
-
-GIT_EXT_VIEWER = '''
-# GIT
-directory/\\.(git)$
-    Open=lazygit-gm
 '''
 
 
@@ -227,6 +249,26 @@ def main(*argv):
             txtfile_func.appendTextFile(menu_filename, MTR_MENUITEM)
             info(u'Add <mtr> traceroute tool')
 
+        # lazygit / Git manager
+        if not txtfile_func.isInTextFile(menu_filename, GIT_MENUITEM):
+            txtfile_func.appendTextFile(menu_filename, GIT_MENUITEM)
+            info(u'Add <git> Git manager')
+
+        # python / Python interpreter
+        if not txtfile_func.isInTextFile(menu_filename, PY_MENUITEM):
+            txtfile_func.appendTextFile(menu_filename, PY_MENUITEM)
+            info(u'Add <python> Python interpreter')
+
+        # ddgr / Internet searching
+        if not txtfile_func.isInTextFile(menu_filename, DDGR_MENUITEM):
+            txtfile_func.appendTextFile(menu_filename, DDGR_MENUITEM)
+            info(u'Add <ddgr> Internet searching')
+
+        # lynx / Internet browser
+        if not txtfile_func.isInTextFile(menu_filename, LYNX_MENUITEM):
+            txtfile_func.appendTextFile(menu_filename, LYNX_MENUITEM)
+            info(u'Add <lynx> Internet browser')
+
         ext_filename = os.path.join(home_path, '.config', 'mc', 'mc.ext')
         if not os.path.exists(ext_filename):
             src_ext_filename = os.path.join('etc', 'mc', 'mc.ext')
@@ -240,13 +282,6 @@ def main(*argv):
                                          src_text=MISC_EXT_SIGNATURE,
                                          dst_text=MISC_EXT_SIGNATURE+os.linesep+LOG_EXT_VIEWER)
             info(u'Add <log> files viewer')
-
-        # Git
-        if not txtfile_func.isInTextFile(ext_filename, GIT_EXT_VIEWER):
-            txtfile_func.replaceTextFile(ext_filename,
-                                         src_text=MISC_EXT_SIGNATURE,
-                                         dst_text=MISC_EXT_SIGNATURE+os.linesep+GIT_EXT_VIEWER)
-            info(u'Add <git> Git manager')
 
         # PDF files
         if not txtfile_func.isInTextFile(ext_filename, PDF_EXT_VIEWER):
