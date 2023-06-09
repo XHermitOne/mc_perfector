@@ -37,6 +37,9 @@ sudo apt install --assume-yes poppler-utils
 # HTML viewer and Internet browser
 sudo apt install --assume-yes lynx
 
+# JSON viewer
+sudo snap install json-tui
+
 # Image viewer
 sudo snap install --edge tiv
 

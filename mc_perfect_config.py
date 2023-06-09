@@ -178,6 +178,12 @@ regex/\\.[Hh][Tt][Mm]$
     View=lynx %f
 '''
 
+JSON_EXT_VIEWER = '''
+# JSON
+regex/\\.[Jj][Ss][Oo][Nn]$
+    View=json-tui %f
+'''
+
 DOCX_EXT_VIEWER = '''
 # Docx
 regex/\\.[Dd][Oo][Cc][Xx]$
@@ -309,6 +315,13 @@ def main(*argv):
                                          src_text=DOC_EXT_SIGNATURE,
                                          dst_text=DOC_EXT_SIGNATURE+os.linesep+HTM_EXT_VIEWER)
             info(u'Add <htm> files viewer')
+
+        # JSON files
+        if not txtfile_func.isInTextFile(ext_filename, JSON_EXT_VIEWER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=DOC_EXT_SIGNATURE,
+                                         dst_text=DOC_EXT_SIGNATURE+os.linesep+JSON_EXT_VIEWER)
+            info(u'Add <json> files viewer')
 
         # Docx files
         if not txtfile_func.isInTextFile(ext_filename, DOCX_EXT_VIEWER):
