@@ -150,6 +150,12 @@ L       Internet browser
         cat /tmp/inet_url.tmp | lynx -accept_all_cookies - 
 '''
 
+
+NG_MENUITEM = '''
+N       Norton Guide Viewer
+        ng_view_dos
+'''
+
 MISC_EXT_SIGNATURE = '### Miscellaneous ###'
 DOC_EXT_SIGNATURE = '### Documents ###'
 IMG_EXT_SIGNATURE = '### Images ###'
@@ -220,6 +226,12 @@ shell/i/.dbf
 	View=%view{ascii} /usr/lib/mc/ext.d/misc.sh view dbf
 '''
 
+EXE_EXT_LAUNCHER = '''
+# Dos Exe
+regex/\\.[Ee][Xx][Ee]$
+    Open=dos_exe_launcher --exe-filename=%f
+'''
+
 
 def main(*argv):
     """
@@ -286,6 +298,11 @@ def main(*argv):
         if not txtfile_func.isInTextFile(menu_filename, LYNX_MENUITEM):
             txtfile_func.appendTextFile(menu_filename, LYNX_MENUITEM)
             info(u'Add <lynx> Internet browser in file <%s>' % menu_filename)
+
+        # NG / Norton Guide Viewer
+        if not txtfile_func.isInTextFile(menu_filename, NG_MENUITEM):
+            txtfile_func.appendTextFile(menu_filename, NG_MENUITEM)
+            info(u'Add <NG> Norton Guide Viewer in file <%s>' % menu_filename)
 
         ext_filename = os.path.join(home_path, '.config', 'mc', 'mc.ext')
         if not os.path.exists(ext_filename):
@@ -369,7 +386,13 @@ def main(*argv):
                                          dst_text=MISC_EXT_SIGNATURE+os.linesep+DBF_EXT_VIEWER)
             info(u'Add <dbf> files viewer in file <%s>' % ext_filename)
 
-	# Увеличить масштаб окна dosbox
+        if not txtfile_func.isInTextFile(ext_filename, EXE_EXT_LAUNCHER):
+            txtfile_func.replaceTextFile(ext_filename,
+                                         src_text=MISC_EXT_SIGNATURE,
+                                         dst_text=MISC_EXT_SIGNATURE + os.linesep + EXE_EXT_LAUNCHER)
+            info(u'Add <exe> Dos Exe files launcher in file <%s>' % ext_filename)
+
+        # Увеличить масштаб окна dosbox
         dosbox_conf_filename = os.path.join(home_path, '.dosbox', 'dosbox-0.74-3.conf')
         if not txtfile_func.isInTextFile(dosbox_conf_filename, 'scaler=normal2x forced'):
             txtfile_func.replaceTextFile(dosbox_conf_filename,
