@@ -58,12 +58,16 @@ sudo snap install lazygit-gm
 # Internet searching
 sudo snap install ddgr
 
+# CSV viewer
+sudo apt install --assume-yes visidata
+
+
 # Configuration script
 sudo apt install --assume-yes python3-pip
 sudo apt install --assume-yes python3-dialog
 sudo apt install --assume-yes python3-jinja2
 sudo apt install --assume-yes python3-termcolor
-pip3 install rich
+sudo pip3 install --break-system-packages rich
 
 mc --help
 
